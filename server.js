@@ -2,13 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 4000;
 
 //CORS POLICY
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
