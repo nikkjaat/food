@@ -1,8 +1,6 @@
 const allowedOrigins = [
   "http://localhost:3000",
-  ["https://food-hub-phi.vercel.app/"],
-  ["https://food-m29jtq56z-nikhils-projects-2570a626.vercel.app/"],
-  ["*"],
+  ["https://nikhil-food-lmgsp6lut-nikhils-projects-2570a626.vercel.app/"],
 ];
 
 const corsOptions = {
