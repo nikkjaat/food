@@ -1,8 +1,7 @@
 const allowedOrigins = [
-  "http://localhost:3000",
   "https://nikhil-food-lmgsp6lut-nikhils-projects-2570a626.vercel.app",
   "https://aesthetic-toffee-df3bb9.netlify.app",
-  "*"
+  ,
 ];
 
 const corsOptions = {
