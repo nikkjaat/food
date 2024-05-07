@@ -1,7 +1,6 @@
 const allowedOrigins = [
-  "https://nikhil-food-lmgsp6lut-nikhils-projects-2570a626.vercel.app",
+  "https://food-hub-frontend.vercel.app",
   "https://aesthetic-toffee-df3bb9.netlify.app",
-  ,
 ];
 
 const corsOptions = {
