@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
+const PORT = process.env.PORT || 4000
 
 //CORS POLICY
 const cors = require("cors");
@@ -41,7 +42,7 @@ app.get("*", (req, res, next) => {
 
 mongoConnect()
   .then(() => {
-    app.listen(process.env.PORT, () => {
+    app.listen(PORT, () => {
       console.log(`Backend is listening on Port ${process.env.PORT}`);
     });
   })
