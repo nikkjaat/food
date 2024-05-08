@@ -10,7 +10,7 @@ const MIME_TYPE_MAP = {
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // console.log(file);
+    console.log(file);
     cb(null, "uploads/images");
   },
   filename: (req, file, cb) => {

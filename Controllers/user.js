@@ -109,24 +109,23 @@ exports.postlogOut = (req, res, next) => {
 };
 
 exports.updateUserInfo = async (req, res, next) => {
-  // console.log(req.body);
+  console.log(req.body);
   const _id = req.query.userId;
 
   const { name, email } = req.body;
 
   const existingUser = await User.findById(_id);
 
-  if (existingUser.profilePicture) {
-    if (req.file) {
-      try {
-        const result = await fileDeleteHandler(existingUser.profilePicture);
-      } catch (err) {
-        return res.status(500).json({ message: "Unable to delete File" });
-      }
+  if (req.file) {
+    try {
+      const result = await fileDeleteHandler(existingUser.profilePicture);
+    } catch (err) {
+      return res.status(500).json({ message: "Unable to delete File" });
     }
   }
+
   if (!existingUser) {
-    return res.status(404).json({ message: "Product does not Exist" });
+    return res.status(404).json({ message: "User does not Exist" });
   }
 
   try {
