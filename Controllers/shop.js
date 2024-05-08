@@ -7,7 +7,7 @@ exports.getFood = async (req, res, next) => {
     if (products.length > 0) {
       return res.status(200).json({ products: products });
     }
-    res.status(200).json({ message: "No products found", products: [] });
+    res.status(204).json({ message: "No products found", products: [] });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
