@@ -115,10 +115,11 @@ exports.updateUserInfo = async (req, res, next) => {
   const { name, email } = req.body;
 
   const existingUser = await User.findById(_id);
+  console.log(existingUser.profilePicture);
 
   if (req.file) {
     try {
-      const result = await fileDeleteHandler(existingUser.profilePicture);
+      await fileDeleteHandler(existingUser.profilePicture);
     } catch (err) {
       return res.status(500).json({ message: "Unable to delete File" });
     }

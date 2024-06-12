@@ -57,6 +57,10 @@ const UserSchema = new Schema({
       contactNo: { type: Number, required: true },
     },
   ],
+  profilePicture: {
+    type: String,
+    default: "",
+  },
   date: {
     type: Date,
     default: Date.now(),
