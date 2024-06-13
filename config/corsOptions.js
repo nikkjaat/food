@@ -2,6 +2,7 @@ const allowedOrigins = [
   "https://food-hub-frontend.vercel.app",
   "https://aesthetic-toffee-df3bb9.netlify.app",
   "http://localhost:3000",
+  "https://food-hubb.netlify.app/",
 ];
 
 const corsOptions = {
