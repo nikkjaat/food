@@ -105,7 +105,6 @@ exports.updateProduct = async (req, res, next) => {
 
 exports.deleteProduct = async (req, res, next) => {
   const prodId = req.params.prodId;
-  console.log(prodId);
   try {
     const isExist = await Product.findById(prodId);
     // console.log(isExist);
