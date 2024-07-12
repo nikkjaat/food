@@ -11,7 +11,8 @@ const {
   updateUserInfo,
   getOTP,
   resetPassword,
-  setPassword
+  setPassword,
+  defaultAddress,
 } = require("../Controllers/user");
 const isAuth = require("../Middlewares/isAuth");
 const upload = require("../Middlewares/file-upload");
@@ -43,5 +44,7 @@ router.put(
   upload.single("profilePicture"),
   updateUserInfo
 );
+
+router.post("/setdefaultaddress", defaultAddress);
 
 module.exports = router;

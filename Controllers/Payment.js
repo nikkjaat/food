@@ -56,6 +56,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.postCheckout = async (req, res) => {
   const { addressId, productId, userId, quantity } = req.body;
 
+  console.log(addressId);
   try {
     const product = await Product.findById(productId);
     // console.log(product);

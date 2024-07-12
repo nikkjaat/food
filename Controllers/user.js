@@ -248,3 +248,16 @@ exports.setPassword = async (req, res, next) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+exports.defaultAddress = async (req, res, next) => {
+  const userId = req.query.userId;
+  const addressId = req.query.addressId;
+  try {
+    const user = await User.findById(userId);
+    user.defaultAddress = addressId;
+    user.save();
+    res.status(200).json("Set Default Address");
+  } catch (error) {
+    res.status(404).json(error);
+  }
+};

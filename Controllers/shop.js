@@ -93,7 +93,11 @@ exports.getAddress = async (req, res, next) => {
     }
     res
       .status(200)
-      .json({ message: "Address fetch Successfully", data: address });
+      .json({
+        message: "Address fetch Successfully",
+        data: address,
+        defaultAddress: req.user.defaultAddress,
+      });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -135,7 +139,7 @@ exports.filterProducts = async (req, res, next) => {
   // console.log(filterProduct);
   // const allProducts = await Product.find({}).lean();
   const products = await Product.find({
-    'categoryName': { $regex: `${filterProduct}`, $options: 'i' },
+    categoryName: { $regex: `${filterProduct}`, $options: "i" },
   });
   if (products != []) {
     return res.status(200).json({ products: products });
