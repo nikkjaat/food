@@ -93,7 +93,7 @@ exports.postCheckout = async (req, res) => {
       ],
       customer: customer.id,
       mode: "payment",
-      success_url: `http://localhost:3000/`,
+      success_url: process.env.FRONTEND_URL,
       cancel_url: `http://localhost:3000/cancel`,
     });
 
