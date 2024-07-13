@@ -91,13 +91,11 @@ exports.getAddress = async (req, res, next) => {
     if (address.length === 0) {
       return res.status(200).json({ message: "No Address Found!", data: [] });
     }
-    res
-      .status(200)
-      .json({
-        message: "Address fetch Successfully",
-        data: address,
-        defaultAddress: req.user.defaultAddress,
-      });
+    res.status(200).json({
+      message: "Address fetch Successfully",
+      data: address,
+      defaultAddress: req.user.defaultAddress,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -107,7 +105,7 @@ exports.getSingleAddress = async (req, res, next) => {
   const addressId = req.query.addressId;
   try {
     const address = await req.user.getSingleAddress(addressId);
-    console.log(address);
+    // console.log(address);
     res.status(200).json({ message: "Fetch Single Address", data: address });
   } catch (err) {
     res.status(500).json({ message: err });

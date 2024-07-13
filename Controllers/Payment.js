@@ -74,7 +74,7 @@ exports.postCheckout = async (req, res) => {
 
     const customer = await stripe.customers.create({
       name: address.name,
-
+      email: user.email,
       address: {
         line1: address.street,
         city: address.city,
