@@ -3,6 +3,7 @@ const allowedOrigins = [
   "https://aesthetic-toffee-df3bb9.netlify.app",
   "http://localhost:3000",
   "https://food-hubb.netlify.app",
+  "https://sdk.cashfree.com/js/v3/cashfree.js",
 ];
 
 const corsOptions = {

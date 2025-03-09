@@ -12,6 +12,7 @@ const {
   updateAddress,
   getSingleAddress,
   filterProducts,
+  myOrder,
 } = require("../Controllers/shop");
 const isAuth = require("../Middlewares/isAuth");
 
@@ -26,5 +27,6 @@ router.get("/getsingleaddress", isAuth, getSingleAddress);
 router.delete("/deleteaddress", isAuth, deleteAddress);
 router.patch("/updateaddress", isAuth, updateAddress);
 router.get("/filterproducts", filterProducts);
+router.get("/myorder", isAuth, myOrder);
 
 module.exports = router;

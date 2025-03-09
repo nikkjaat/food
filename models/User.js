@@ -45,16 +45,12 @@ const UserSchema = new Schema({
       },
     },
   ],
-  address: [
+  myAddress: [
     {
-      name: { type: String, required: true },
-      houseNo: { type: Number, required: true },
-      street: { type: String, required: true },
-      pincode: { type: Number, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      country: { type: String, required: true },
-      contactNo: { type: Number, required: true },
+      addressId: {
+        type: mongoose.Types.ObjectId,
+        ref: "address",
+      },
     },
   ],
   profilePicture: {
@@ -64,6 +60,20 @@ const UserSchema = new Schema({
   defaultAddress: {
     type: String,
   },
+  myOrder: [
+    {
+      orderId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "order",
+      },
+      productId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "food_items",
+      },
+    },
+  ],
   date: {
     type: Date,
     default: Date.now(),
@@ -146,6 +156,15 @@ UserSchema.methods.updateAddress = async function (addressId, updatedData) {
 
   this.address = updatedAddress;
   return this.save();
+};
+
+UserSchema.methods.getOrders = async function () {
+  await this.populate([
+    { path: "myOrder.orderId", model: "order" },
+    { path: "myOrder.productId", model: "food_items" },
+  ]);
+
+  return this;
 };
 
 module.exports = mongoose.model("user", UserSchema);

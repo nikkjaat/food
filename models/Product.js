@@ -18,9 +18,9 @@ const ProductSchema = new Schema(
     },
 
     description: String,
-    quantity: {
+
+    shippingCost: {
       type: Number,
-      required: true,
     },
 
     price: {

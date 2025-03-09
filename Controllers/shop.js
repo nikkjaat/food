@@ -1,3 +1,5 @@
+const Address = require("../models/Address");
+const Order = require("../models/Order");
 const Product = require("../models/Product");
 
 exports.getFood = async (req, res, next) => {
@@ -77,7 +79,10 @@ exports.addAddress = async (req, res, next) => {
     return res.status(422).json({ message: "All Fields are Mandatory" });
   }
   try {
-    req.user.address.push(address);
+    const addresses = await Address.create(address);
+
+    // Push the new address id to user's address array in the database.
+    req.user.myAddress.push({ addressId: addresses._id });
     await req.user.save();
     res.status(200).json({ message: "Address added Successfully" });
   } catch (err) {
@@ -86,7 +91,8 @@ exports.addAddress = async (req, res, next) => {
 };
 
 exports.getAddress = async (req, res, next) => {
-  const address = req.user.address;
+  const address = await req.user.populate("myAddress.addressId");
+
   try {
     if (address.length === 0) {
       return res.status(200).json({ message: "No Address Found!", data: [] });
@@ -104,9 +110,16 @@ exports.getAddress = async (req, res, next) => {
 exports.getSingleAddress = async (req, res, next) => {
   const addressId = req.query.addressId;
   try {
-    const address = await req.user.getSingleAddress(addressId);
-    // console.log(address);
+    const address = await Address.findById(addressId);
     res.status(200).json({ message: "Fetch Single Address", data: address });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+exports.updateAddress = async (req, res, next) => {
+  try {
+    await Address.findByIdAndUpdate(req.query.addressId, req.body);
+    res.status(200).json({ message: "Address Updated Successfully" });
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -116,17 +129,10 @@ exports.deleteAddress = async (req, res, next) => {
   const prodId = req.query.prodId;
 
   try {
-    req.user.address.pull({ _id: prodId });
+    await Address.findByIdAndDelete(prodId);
+    req.user.myAddress.pull({ _id: prodId });
     await req.user.save();
     res.status(200).json({ message: "Address removed successfully" });
-  } catch {
-    res.status(500).json({ message: err });
-  }
-};
-exports.updateAddress = async (req, res, next) => {
-  try {
-    await req.user.updateAddress(req.query.addressId, req.body);
-    res.status(200).json({ message: "Address Updated Successfully" });
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -134,12 +140,22 @@ exports.updateAddress = async (req, res, next) => {
 
 exports.filterProducts = async (req, res, next) => {
   const filterProduct = req.query.filter;
-  // console.log(filterProduct);
   // const allProducts = await Product.find({}).lean();
   const products = await Product.find({
     categoryName: { $regex: `${filterProduct}`, $options: "i" },
   });
   if (products != []) {
     return res.status(200).json({ products: products });
+  }
+};
+
+exports.myOrder = async (req, res) => {
+  try {
+    const user = await req.user.getOrders();
+    return res.status(200).json({ message: "My Order", data: user.myOrder });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || "Something went wrong" });
   }
 };

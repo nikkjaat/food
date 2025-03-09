@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const isAuth = async (req, res, next) => {
-  console.log(req.headers);
   if (!req.headers.authorization) {
     return res.status(400).json({ message: "Authorization Required" });
   }

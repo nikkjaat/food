@@ -13,7 +13,6 @@ const {
   getSingleProduct,
   deleteProduct,
   updateProduct,
-  fileUpload,
 } = require("../Controllers/Admin");
 const isAuth = require("../Middlewares/isAuth");
 

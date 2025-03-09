@@ -1,8 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const cloudinary = require("cloudinary").v2;
 const jwt = require("jsonwebtoken");
-const fileDeleteHandler = require("../utils/file-delete");
+// const fileDeleteHandler = require("../utils/file-delete");
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -14,21 +15,16 @@ const transporter = nodemailer.createTransport({
 
 exports.postSignup = async (req, res, next) => {
   const { name, location, email, password, roles } = req.body;
-
   //1 Check user exists or not
-
   try {
     const user = await User.findOne({ email: email });
-    console.log(user);
     if (user) {
       return res.status(403).json({ message: "User Already Exits" });
     }
   } catch (error) {
     return res.status(500).json({ message: error });
   }
-
   //2 Hashing the password
-
   let hashPassword;
   try {
     hashPassword = await bcrypt.hash(password, 8);
@@ -54,7 +50,6 @@ exports.getLogin = async (req, res, next) => {
 
   //1 Check user exists or not
   const user = await User.findOne({ email });
-  console.log(user);
   try {
     if (!user) {
       return res.status(200).json({ message: "User not exists" });
@@ -108,18 +103,46 @@ exports.postlogOut = (req, res, next) => {
   res.redirect("/");
 };
 
+const deleteCloudinaryImage = async (imageUrl) => {
+  try {
+    if (!imageUrl) {
+      console.log("No image URL provided");
+      return null;
+    }
+
+    // Extract the public_id from the URL
+    const [image_id, extension] = imageUrl.split("/").slice(-1)[0].split(".");
+
+    // Append folder path if applicable
+    const fullPublicId = `FoodHub/${image_id}.${extension}`;
+    console.log("Full public_id for deletion:", fullPublicId);
+
+    // Perform the deletion
+    const result = await cloudinary.uploader.destroy(fullPublicId);
+
+    // Check and log result
+    if (result.result === "ok") {
+      console.log("Image successfully deleted");
+      return true;
+    } else {
+      console.log("Failed to delete image. Response:", result);
+      return true;
+    }
+  } catch (error) {
+    return false; // Return false in case of any error
+  }
+};
+
 exports.updateUserInfo = async (req, res, next) => {
-  console.log(req.body);
   const _id = req.query.userId;
 
   const { name, email } = req.body;
 
   const existingUser = await User.findById(_id);
-  console.log(existingUser.profilePicture);
 
   if (req.file) {
     try {
-      await fileDeleteHandler(existingUser.profilePicture);
+      await deleteCloudinaryImage(existingUser.profilePicture);
     } catch (err) {
       return res.status(500).json({ message: "Unable to delete File" });
     }
@@ -182,12 +205,10 @@ exports.resetPassword = async (req, res, next) => {
   const email = req.body.email;
   const OTP = req.body.OTP;
 
-  console.log(email, OTP);
 
   let user;
   try {
     user = await User.findOne({ email });
-    // console.log(user);
     if (!user) {
       return res.status(403).json({ message: "Account not found" });
     }
@@ -212,7 +233,6 @@ exports.setPassword = async (req, res, next) => {
   const newPassword = req.body.newPassword;
   const userId = req.body.userId;
   const otp = req.body.otp;
-  console.log(req.body);
 
   try {
     const user = await User.findOne({

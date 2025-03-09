@@ -38,6 +38,7 @@ router.post("/getotp", getOTP);
 router.post("/resetpassword", resetPassword);
 
 router.post("/setpassword", setPassword);
+
 router.put(
   "/updateuserinfo",
   isAuth,
