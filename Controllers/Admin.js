@@ -1,3 +1,4 @@
+const Order = require("../models/Order");
 const Product = require("../models/Product");
 const User = require("../models/User");
 const cloudinary = require("cloudinary").v2;
@@ -152,5 +153,53 @@ exports.deleteProduct = async (req, res, next) => {
     res.status(200).json({ message: "Deleted product Successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getNewOrder = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate({
+      path: "getNewOrder",
+      populate: [
+        { path: "order", populate: ["productId", "addressId", "userId"] },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ order: user.getNewOrder });
+  } catch (error) {
+    console.error("❌ Error fetching orders:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.setOrderStatus = async (req, res, next) => {
+  const id = req.query.id;
+
+  try {
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    order.orderStatus = req.body.status;
+    await order.save();
+
+    // Emit event for real-time updates
+    if (global.io) {
+      global.io.emit("orderStatusUpdated", {
+        orderId: id,
+        status: req.body.status,
+      });
+      // console.log(`📡 Emitted orderStatusUpdated: ${id} -> ${req.body.status}`);
+    }
+
+    return res.status(200).json({ message: "Order Status Changed" });
+  } catch (error) {
+    console.error("❌ Error setting order status:", error);
+    res.status(500).json({ message: error.message });
   }
 };

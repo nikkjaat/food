@@ -60,6 +60,19 @@ const UserSchema = new Schema({
   defaultAddress: {
     type: String,
   },
+  getNewOrder: [
+    {
+      order: {
+        type: mongoose.Types.ObjectId,
+        // required: true,
+        ref: "order",
+      },
+      status: {
+        type: String,
+        default: "Pending",
+      },
+    },
+  ],
   myOrder: [
     {
       orderId: {

@@ -4,10 +4,12 @@ const OrderSchema = new mongoose.Schema({
   productId: {
     type: String,
     required: true,
+    ref: "food_items",
   },
   addressId: {
     type: String,
     required: true,
+    ref: "address",
   },
   quantity: {
     type: Number,
@@ -20,15 +22,21 @@ const OrderSchema = new mongoose.Schema({
   totalPrice: {
     type: Number,
   },
-  status: {
+  paymentStatus: {
     type: String,
     default: "Pending",
   },
   userId: {
     type: String,
+    ref: "user",
   },
   orderId: {
     type: String,
+    required: true,
+  },
+  orderStatus: {
+    type: String,
+    default: "Pending",
     required: true,
   },
 });

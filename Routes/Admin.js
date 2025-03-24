@@ -13,6 +13,8 @@ const {
   getSingleProduct,
   deleteProduct,
   updateProduct,
+  getNewOrder,
+  setOrderStatus,
 } = require("../Controllers/Admin");
 const isAuth = require("../Middlewares/isAuth");
 
@@ -22,7 +24,7 @@ router.get("/getproducts", isAuth, getAdminProducts);
 router.get("/getsingleproduct", isAuth, getSingleProduct);
 router.put("/updateproduct", isAuth, upload.single("imgURL"), updateProduct);
 router.delete("/deleteproduct/:prodId", isAuth, deleteProduct);
-// router.post("/fileupload", isAuth, upload.single("image"), fileUpload);
-// router.post("/addtocart/:prodId", isAuth, addToCart);
+router.get("/getneworder", isAuth, getNewOrder);
+router.post("/setorderstatus", setOrderStatus);
 
 module.exports = router;
