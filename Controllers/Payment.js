@@ -131,6 +131,7 @@ exports.session = async (req, res) => {
       userId,
       orderId: paymentData.order_id,
       paymentStatus: paymentData.order_status,
+      orderStatus: "Pending",
     });
 
     await order.save();
