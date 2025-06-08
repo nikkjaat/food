@@ -127,10 +127,13 @@ exports.updateAddress = async (req, res, next) => {
 
 exports.deleteAddress = async (req, res, next) => {
   const prodId = req.query.prodId;
-
+  console.log(prodId);
+  if (!prodId) {
+    return res.status(422).json({ message: "Product ID is required" });
+  }
   try {
     await Address.findByIdAndDelete(prodId);
-    req.user.myAddress.pull({ _id: prodId });
+    req.user.myAddress.pull({ addressId: prodId });
     await req.user.save();
     res.status(200).json({ message: "Address removed successfully" });
   } catch (err) {
